@@ -3,18 +3,16 @@ package com.nikhilpillay.aggregator.service.impl;
 import com.nikhilpillay.aggregator.model.Customer;
 import com.nikhilpillay.aggregator.repository.CustomerRepository;
 import com.nikhilpillay.aggregator.service.CustomerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository repository;
-
-    public CustomerServiceImpl(CustomerRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public List<Customer> findAll() {
@@ -35,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer update(Long id, Customer customer) {
         Customer existing = findById(id);
-        existing.setFirstName(customer.getFirstName());
+        existing.setName(customer.getName());
         return repository.save(existing);
     }
 
