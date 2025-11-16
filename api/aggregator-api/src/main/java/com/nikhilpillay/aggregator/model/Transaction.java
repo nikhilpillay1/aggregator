@@ -24,9 +24,11 @@ public class Transaction {
 
     private BigDecimal amount;
 
-    private TransactionSource source;
-
+    @Enumerated(value = EnumType.STRING)
     private TransactionCategory category;
+
+    @Enumerated(value = EnumType.STRING)
+    private TransactionSource source;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

@@ -1,6 +1,10 @@
 package com.nikhilpillay.aggregator.service.impl;
 
+import com.nikhilpillay.aggregator.mapper.CustomerRequestMapper;
+import com.nikhilpillay.aggregator.mapper.CustomerResponseMapper;
 import com.nikhilpillay.aggregator.model.Customer;
+import com.nikhilpillay.aggregator.model.dto.CustomerRequestDto;
+import com.nikhilpillay.aggregator.model.dto.CustomerResponseDto;
 import com.nikhilpillay.aggregator.repository.CustomerRepository;
 import com.nikhilpillay.aggregator.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -14,27 +18,36 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository repository;
 
+    private final CustomerRequestMapper requestMapper;
+
+    private final CustomerResponseMapper responseMapper;
+
+
     @Override
-    public List<Customer> findAll() {
-        return repository.findAll();
+    public List<CustomerResponseDto> findAll() {
+        return repository.findAll().stream().map(responseMapper::toDto).toList();
     }
 
     @Override
-    public Customer findById(Long id) {
-        return repository.findById(id)
+    public CustomerResponseDto findById(Long id) {
+        return repository.findById(id).map(responseMapper::toDto)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
     }
 
     @Override
-    public Customer save(Customer customer) {
-        return repository.save(customer);
+    public CustomerResponseDto create(CustomerRequestDto dto) {
+        Customer customer = requestMapper.toEntity(dto);
+        Customer saved = repository.save(customer);
+        return responseMapper.toDto(saved);
     }
 
     @Override
-    public Customer update(Long id, Customer customer) {
-        Customer existing = findById(id);
-        existing.setName(customer.getName());
-        return repository.save(existing);
+    public CustomerResponseDto update(Long id, CustomerRequestDto dto) {
+        Customer customer = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
+        customer.setName(dto.name());
+        Customer updated = repository.save(customer);
+        return responseMapper.toDto(updated);
     }
 
     @Override

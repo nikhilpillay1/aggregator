@@ -1,18 +1,19 @@
 package com.nikhilpillay.aggregator.service;
 
-import com.nikhilpillay.aggregator.model.Customer;
+import com.nikhilpillay.aggregator.model.dto.CustomerRequestDto;
+import com.nikhilpillay.aggregator.model.dto.CustomerResponseDto;
 
 import java.util.List;
 
 public interface CustomerService {
 
-    List<Customer> findAll();
+    List<CustomerResponseDto> findAll();
 
-    Customer findById(Long id);
+    CustomerResponseDto findById(Long id);
 
-    Customer save(Customer customer);
+    CustomerResponseDto create(CustomerRequestDto dto);
 
-    Customer update(Long id, Customer customer);
+    CustomerResponseDto update(Long id, CustomerRequestDto dto);
 
     void delete(Long id);
 }

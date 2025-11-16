@@ -23,13 +23,13 @@ public class OllamaClassifierServiceImpl implements TransactionClassifierService
                 new BeanOutputConverter<>(TransactionClassification.class);
 
         String systemPrompt = """
-            You are a bank transaction classifier. Analyze the transaction description 
+            You are a bank transaction classifier. Analyze the transaction description
             and determine which category it belongs to. Be precise and consistent.
             
-            Categories: ACCOMMODATION, UTILITIES, GROCERIES, TRANSPORTATION, INSURANCE, HEALTHCARE, DEBT_PAYMENT, ENTERTAINMENT, TRAVEL, SUBSCRIPTION, INCOME, INVESTMENT, TAXES, WITHDRAWAL, DEPOSIT, TRANSFER, OTHER
+            Categories: ACCOMMODATION, UTILITIES, GROCERIES, RESTAURANT, TRANSPORTATION, INSURANCE, HEALTHCARE, DEBT_PAYMENT, ACCOUNT_FEE, GAMING, TRAVEL, STREAMING_SERVICE, AIRTIME, INCOME, INVESTMENT, TAXES, WITHDRAWAL, DEPOSIT, PAYMENT, EFT, OTHER
             
-            CRITICAL: Respond ONLY with the JSON format specified below. 
-            Do not include any explanatory text, preamble, or comments.
+            CRITICAL: Respond with ONLY valid JSON on a SINGLE LINE with NO whitespace, newlines, or formatting.
+            Do not include any explanatory text, preamble, comments, or backslashes.
             Start your response directly with the opening brace.
             
             {format}

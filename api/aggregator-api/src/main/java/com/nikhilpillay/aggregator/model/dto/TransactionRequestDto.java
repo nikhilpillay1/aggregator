@@ -10,7 +10,7 @@ public record TransactionRequestDto(
         LocalDate date,
         String description,
         BigDecimal amount,
-        TransactionSource source,
         TransactionCategory category,
+        TransactionSource source,
         long customerId
 ) {}
