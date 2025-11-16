@@ -1,13 +1,11 @@
 package com.nikhilpillay.aggregator.service.impl;
 
-import com.nikhilpillay.aggregator.mapper.TransactionRequestMapper;
-import com.nikhilpillay.aggregator.mapper.TransactionResponseMapper;
+import com.nikhilpillay.aggregator.config.CsvSourceConfigProperties;
 import com.nikhilpillay.aggregator.model.Customer;
 import com.nikhilpillay.aggregator.model.Transaction;
 import com.nikhilpillay.aggregator.model.enums.TransactionCategory;
 import com.nikhilpillay.aggregator.model.enums.TransactionSource;
 import com.nikhilpillay.aggregator.repository.CustomerRepository;
-import com.nikhilpillay.aggregator.repository.TransactionRepository;
 import com.nikhilpillay.aggregator.service.CsvParserService;
 import com.nikhilpillay.aggregator.service.TransactionClassifierService;
 import lombok.RequiredArgsConstructor;
@@ -28,16 +26,23 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class FnbCsvParserServiceImpl implements CsvParserService {
+public class CsvParserServiceImpl implements CsvParserService {
 
     private final TransactionClassifierService transactionClassifierService;
 
     private final CustomerRepository customerRepository;
 
+    private final CsvSourceConfigProperties csvSourceConfigProperties;
+
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
     @Override
-    public List<Transaction> parseCsv(MultipartFile file, Long customerId) throws IOException {
+    public List<Transaction> parseCsv(MultipartFile file, Long customerId, TransactionSource source) throws IOException {
+
+        CsvSourceConfigProperties.CsvConfig config = csvSourceConfigProperties.getConfigs().get(source);
+        if (config == null) {
+            throw new IllegalArgumentException("No configuration found for: " + source);
+        }
 
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid customer ID"));
@@ -47,52 +52,52 @@ public class FnbCsvParserServiceImpl implements CsvParserService {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) { //skip lines until you reach the header
-                if (line.trim().startsWith("Date, Amount, Balance, Description")) {
+                if (line.contains(config.getHeaderLine())) {
                     break;
                 }
             }
 
             CSVFormat csvFormat = CSVFormat.DEFAULT
-                    .withHeader("Date", "Amount", "Balance", "Description")
+                    .withHeader(config.getHeaders())
                     .withSkipHeaderRecord(false)
                     .withTrim();
 
             try (CSVParser csvParser = new CSVParser(reader, csvFormat)) {
                 for (CSVRecord record : csvParser) {
-                        Transaction transaction = parseRecord(record, customer);
-                        transactions.add(transaction);
+                    Transaction transaction = parseRecord(record, customer, source, config);
+                    transactions.add(transaction);
                 }
             }
         }
         return transactions;
     }
 
-    private Transaction parseRecord(CSVRecord record,Customer customer) {
+    private Transaction parseRecord(CSVRecord record, Customer customer, TransactionSource source, CsvSourceConfigProperties.CsvConfig config) {
         Transaction transaction = new Transaction();
 
         //parse date
-        String dateStr = record.get("Date");
+        String dateStr = record.get(config.getDateKey());
         LocalDate date = LocalDate.parse(dateStr, DATE_FORMATTER);
         transaction.setDate(date);
 
         //parse amount
-        String amountStr = record.get("Amount").replace(",", "");
+        String amountStr = record.get(config.getAmountKey()).replace(",", "");
         BigDecimal amount = new BigDecimal(amountStr);
         transaction.setAmount(amount);
 
         //parse description
-        String description = record.get("Description");
+        String description = record.get(config.getDescriptionKey());
         transaction.setDescription(description);
 
         //classify transaction category
         try {
-        TransactionCategory category = transactionClassifierService.classify(description);
-        transaction.setCategory(category);
+            TransactionCategory category = transactionClassifierService.classify(description);
+            transaction.setCategory(category);
         } catch (Exception e) {
             transaction.setCategory(TransactionCategory.OTHER);
         }
 
-        transaction.setSource(TransactionSource.FNB);
+        transaction.setSource(source);
 
         transaction.setCustomer(customer);
         return transaction;

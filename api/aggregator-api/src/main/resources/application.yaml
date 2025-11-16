@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: aggregator
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/aggregator_db
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  ai:
+    model:
+      chat: ollama
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: mistral
+
+csv-source:
+  configs:
+
+    PAYPAL:
+      header-line: '"Date","Time","TimeZone","Name","Type","Status","Currency","Amount","Fees","Total","Exchange Rate","Receipt ID","Balance","Transaction ID","Item Title"'
+      date-key: Date
+      amount-key: Amount
+      description-key: Item Title
+
+    FNB:
+      header-line: 'Date, Amount, Balance, Description'
+      date-key: Date
+      amount-key: Amount
+      description-key: Description
