@@ -1,0 +1,23 @@
+
+<div class="flex">
+  <p-fileupload mode="basic" chooseIcon="pi pi-upload" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" [auto]="true" chooseLabel="Browse" />
+</div>
+
+<p-table [value]="allTransactions()" [tableStyle]="{ 'min-width': '50rem' }">
+  <ng-template #header>
+    <tr>
+      <th>Date</th>
+      <th>Amount</th>
+      <th>Description</th>
+      <th>Category</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-transaction>
+    <tr>
+      <td>{{ transaction.date }}</td>
+      <td>{{ transaction.amount }}</td>
+      <td>{{ transaction.description }}</td>
+      <td>{{ transaction.category }}</td>
+    </tr>
+  </ng-template>
+</p-table>

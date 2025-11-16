@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+@import "primeicons/primeicons.css";
+
+html, body { height: 100%; }
+
+.content-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
