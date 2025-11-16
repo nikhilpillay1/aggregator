@@ -26,7 +26,7 @@ public class OllamaClassifierServiceImpl implements TransactionClassifierService
             You are a bank transaction classifier. Analyze the transaction description
             and determine which category it belongs to. Be precise and consistent.
             
-            Categories: ACCOMMODATION, UTILITIES, GROCERIES, RESTAURANT, TRANSPORTATION, INSURANCE, HEALTHCARE, DEBT_PAYMENT, ACCOUNT_FEE, GAMING, TRAVEL, STREAMING_SERVICE, AIRTIME, INCOME, INVESTMENT, TAXES, WITHDRAWAL, DEPOSIT, PAYMENT, EFT, OTHER
+            Categories: ACCOMMODATION, UTILITIES, GROCERIES, SHOPPING, RESTAURANT, TRANSPORTATION, INSURANCE, HEALTHCARE, DEBT_PAYMENT, REFUND, ACCOUNT_FEE, GAMING, TRAVEL, STREAMING_SERVICE, AIRTIME, INCOME, INTEREST, INVESTMENT, TAXES, WITHDRAWAL, DEPOSIT, PAYMENT, EFT, OTHER
             
             CRITICAL: Respond with ONLY valid JSON on a SINGLE LINE with NO whitespace, newlines, or formatting.
             Do not include any explanatory text, preamble, comments, or backslashes.
@@ -35,7 +35,7 @@ public class OllamaClassifierServiceImpl implements TransactionClassifierService
             {format}
             """;
 
-        String response = null;
+        String response;
         try {
             response = chat.prompt()
                     .system(sp -> sp.text(systemPrompt)
@@ -44,7 +44,7 @@ public class OllamaClassifierServiceImpl implements TransactionClassifierService
                     .call()
                     .content();
         } catch (Exception e) {
-            return TransactionCategory.OTHER; //TODO consider a non-LLM fallback using pattern matching
+            return TransactionCategory.OTHER;
         }
 
         return Optional.ofNullable(response)
@@ -52,6 +52,4 @@ public class OllamaClassifierServiceImpl implements TransactionClassifierService
                 .map(TransactionClassification::category)
                 .orElse(TransactionCategory.OTHER);
     }
-
-
 }

@@ -34,8 +34,6 @@ public class CsvParserServiceImpl implements CsvParserService {
 
     private final CsvSourceConfigProperties csvSourceConfigProperties;
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-
     @Override
     public List<Transaction> parseCsv(MultipartFile file, Long customerId, TransactionSource source) throws IOException {
 
@@ -51,7 +49,7 @@ public class CsvParserServiceImpl implements CsvParserService {
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String line;
-            while ((line = reader.readLine()) != null) { //skip lines until you reach the header
+            while ((line = reader.readLine()) != null) { //skip lines until the header line is found
                 if (line.contains(config.getHeaderLine())) {
                     break;
                 }
@@ -77,7 +75,7 @@ public class CsvParserServiceImpl implements CsvParserService {
 
         //parse date
         String dateStr = record.get(config.getDateKey());
-        LocalDate date = LocalDate.parse(dateStr, DATE_FORMATTER);
+        LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern(config.getDateFormat()));
         transaction.setDate(date);
 
         //parse amount

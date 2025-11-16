@@ -20,6 +20,7 @@ public class CsvSourceConfigProperties {
         private String dateKey;
         private String amountKey;
         private String descriptionKey;
+        private String dateFormat;
 
         public String[] getHeaders() {
             String[] headers = headerLine.replaceAll("\"", "").split(",");
