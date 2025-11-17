@@ -23,6 +23,7 @@ public enum TransactionCategory {
     WITHDRAWAL,
     DEPOSIT,
     PAYMENT,
+    TRANSFER,
     EFT,
     OTHER
 }
