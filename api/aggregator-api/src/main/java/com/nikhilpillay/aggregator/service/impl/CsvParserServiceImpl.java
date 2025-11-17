@@ -4,7 +4,6 @@ import com.nikhilpillay.aggregator.config.CsvSourceConfigProperties;
 import com.nikhilpillay.aggregator.model.Customer;
 import com.nikhilpillay.aggregator.model.Transaction;
 import com.nikhilpillay.aggregator.model.enums.TransactionCategory;
-import com.nikhilpillay.aggregator.model.enums.TransactionSource;
 import com.nikhilpillay.aggregator.repository.CustomerRepository;
 import com.nikhilpillay.aggregator.service.CsvParserService;
 import com.nikhilpillay.aggregator.service.TransactionClassifierService;
@@ -35,7 +34,7 @@ public class CsvParserServiceImpl implements CsvParserService {
     private final CsvSourceConfigProperties csvSourceConfigProperties;
 
     @Override
-    public List<Transaction> parseCsv(MultipartFile file, Long customerId, TransactionSource source) throws IOException {
+    public List<Transaction> parseCsv(MultipartFile file, Long customerId, String source) throws IOException {
 
         CsvSourceConfigProperties.CsvConfig config = csvSourceConfigProperties.getConfigs().get(source);
         if (config == null) {
@@ -70,7 +69,7 @@ public class CsvParserServiceImpl implements CsvParserService {
         return transactions;
     }
 
-    private Transaction parseRecord(CSVRecord record, Customer customer, TransactionSource source, CsvSourceConfigProperties.CsvConfig config) {
+    private Transaction parseRecord(CSVRecord record, Customer customer, String source, CsvSourceConfigProperties.CsvConfig config) {
         Transaction transaction = new Transaction();
 
         //parse date

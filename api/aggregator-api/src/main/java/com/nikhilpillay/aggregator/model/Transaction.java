@@ -1,7 +1,6 @@
 package com.nikhilpillay.aggregator.model;
 
 import com.nikhilpillay.aggregator.model.enums.TransactionCategory;
-import com.nikhilpillay.aggregator.model.enums.TransactionSource;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,8 +26,7 @@ public class Transaction {
     @Enumerated(value = EnumType.STRING)
     private TransactionCategory category;
 
-    @Enumerated(value = EnumType.STRING)
-    private TransactionSource source;
+    private String source;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

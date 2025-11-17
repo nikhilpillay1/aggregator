@@ -1,8 +1,8 @@
 package com.nikhilpillay.aggregator.controller;
 
+import com.nikhilpillay.aggregator.config.CsvSourceConfigProperties;
 import com.nikhilpillay.aggregator.model.dto.TransactionRequestDto;
 import com.nikhilpillay.aggregator.model.dto.TransactionResponseDto;
-import com.nikhilpillay.aggregator.model.enums.TransactionSource;
 import com.nikhilpillay.aggregator.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -20,11 +21,13 @@ public class TransactionController {
 
     private final TransactionService service;
 
+    private final CsvSourceConfigProperties configProperties;
+
     @PostMapping("/upload")
     public ResponseEntity<List<TransactionResponseDto>> uploadTransactions(
             @RequestParam("file") MultipartFile file,
             @RequestParam("customerId") Long customerId,
-            @RequestParam("source") TransactionSource source) throws IOException {
+            @RequestParam("source") String source) throws IOException {
             List<TransactionResponseDto> transactions = service.importTransactionsFromCsv(file, customerId, source);
             return ResponseEntity.ok(transactions);
     }
@@ -56,4 +59,8 @@ public class TransactionController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/sources")
+    public Set<String> getAvailableSources() {
+        return configProperties.getAvailableSources();
+    }
 }

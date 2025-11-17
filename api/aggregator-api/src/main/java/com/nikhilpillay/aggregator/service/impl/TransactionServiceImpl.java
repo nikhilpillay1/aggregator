@@ -4,7 +4,6 @@ import com.nikhilpillay.aggregator.mapper.TransactionResponseMapper;
 import com.nikhilpillay.aggregator.model.Transaction;
 import com.nikhilpillay.aggregator.model.dto.TransactionRequestDto;
 import com.nikhilpillay.aggregator.model.dto.TransactionResponseDto;
-import com.nikhilpillay.aggregator.model.enums.TransactionSource;
 import com.nikhilpillay.aggregator.repository.TransactionRepository;
 import com.nikhilpillay.aggregator.service.CsvParserService;
 import com.nikhilpillay.aggregator.service.TransactionService;
@@ -26,8 +25,8 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository repository;
 
     @Override
-    public List<TransactionResponseDto> importTransactionsFromCsv(MultipartFile file, Long customerId, TransactionSource bank) throws IOException {
-        List<Transaction> parsedTransactions = csvParserService.parseCsv(file, customerId, bank);
+    public List<TransactionResponseDto> importTransactionsFromCsv(MultipartFile file, Long customerId, String source) throws IOException {
+        List<Transaction> parsedTransactions = csvParserService.parseCsv(file, customerId, source);
         List<Transaction> savedTransactions = repository.saveAll(parsedTransactions);
         return responseMapper.toDtoList(savedTransactions);
     }

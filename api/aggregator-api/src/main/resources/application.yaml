@@ -25,6 +25,10 @@ spring:
         options:
           model: mistral
 
+# This was designed as a ConfigurationProperties just because this would make it easier to see
+# how support for additional sources can be added. For a proper API, make this a DB entity
+# so that support for more sources can be added during runtime.
+
 csv-source:
   configs:
 

@@ -1,18 +1,30 @@
 package com.nikhilpillay.aggregator.config;
 
-import com.nikhilpillay.aggregator.model.enums.TransactionSource;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
+import java.util.Set;
 
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "csv-source")
 public class CsvSourceConfigProperties {
 
-    private Map<TransactionSource, CsvConfig> configs;
+    private Map<String, CsvConfig> configs;
+
+    public Set<String> getAvailableSources() {
+        return configs.keySet();
+    }
+
+    public CsvConfig getConfig(String source) {
+        return configs.get(source);
+    }
+
+    public boolean isValidSource(String source) {
+        return configs.containsKey(source);
+    }
 
     @Data
     public static class CsvConfig {
@@ -24,7 +36,7 @@ public class CsvSourceConfigProperties {
 
         public String[] getHeaders() {
             String[] headers = headerLine.replaceAll("\"", "").split(",");
-            for (int i = 0; i < headers.length; i++) { //fixes an issue where spaces in the header-line can't be mapped
+            for (int i = 0; i < headers.length; i++) {
                 headers[i] = headers[i].trim();
             }
             return headers;
