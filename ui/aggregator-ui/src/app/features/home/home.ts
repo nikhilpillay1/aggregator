@@ -1,43 +1,139 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
-import {Transaction} from '../../model/transaction';
-import {HttpClient} from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {TableModule} from 'primeng/table';
-import {FileUpload, FileUploadEvent} from 'primeng/fileupload';
-import {Button} from 'primeng/button';
+import {FormsModule} from '@angular/forms';
+import {Select} from 'primeng/select';
+import {DatePicker} from 'primeng/datepicker';
+import {InputText} from 'primeng/inputtext';
+import {CurrencyPipe, NgForOf, NgIf} from '@angular/common';
+import {FileUpload} from 'primeng/fileupload';
 
 @Component({
   selector: 'app-home',
   imports: [
     TableModule,
+    FormsModule,
+    Select,
+    DatePicker,
+    InputText,
+    CurrencyPipe,
     FileUpload,
-    Button,
+    NgIf,
+    NgForOf,
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
 
-  private http = inject(HttpClient);
-  allTransactions = signal<Transaction[]>([]);
+  transactions: any[] = [];
+  categories: any[] = [];
+  sources: string[] = [];
+  selectedSource: string | null = null;
+
+  totalRecords = 0;
+  loading = false;
+
+  searchText = '';
+  selectedCategory = null;
+  dateFrom: Date | null = null;
+  dateTo: Date | null = null;
+  minAmount: number | null = null;
+  maxAmount: number | null = null;
+
+  private searchTimeout: any;
+  private currentPage = 0;
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.loadData();
+    this.loadTransactions({ first: 0, rows: 20 });
+    this.loadSources();
+    this.loadCategories();
   }
 
-  loadData() {
-
-
-    // Mock data for demonstration
-    this.allTransactions.set([
-      { id: 1, date: '2024-01-15', description: 'Grocery Store', amount: 85.50, category: 'GROCERIES', source: 'CREDIT_CARD' },
-      { id: 2, date: '2024-01-16', description: 'Gas Station', amount: 45.00, category: 'TRANSPORTATION', source: 'DEBIT_CARD' },
-      { id: 3, date: '2024-01-17', description: 'Restaurant', amount: 62.30, category: 'DINING', source: 'CREDIT_CARD' },
-      { id: 4, date: '2024-01-18', description: 'Electric Bill', amount: 120.00, category: 'UTILITIES', source: 'BANK_TRANSFER' },
-      { id: 5, date: '2024-01-19', description: 'Online Shopping', amount: 199.99, category: 'SHOPPING', source: 'CREDIT_CARD' }
-    ]);
+  private loadCategories() {
+    this.http.get<any>('http://localhost:8080/api/transactions/categories').subscribe({
+      next: (response) => {
+        this.categories = response;
+      },
+    });
   }
 
-  onUpload($event: FileUploadEvent) {
-    console.log("Hi");
+  private loadSources() {
+    this.http.get<any>('http://localhost:8080/api/transactions/sources').subscribe({
+      next: (response) => {
+        this.sources = response;
+      },
+    });
+  }
+
+  onSearch() {
+    clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.currentPage = 0;
+      this.loadTransactions({ first: 0, rows: 20 });
+    }, 300);
+  }
+
+  loadTransactions(event: any) {
+    this.loading = true;
+    this.currentPage = event.first / event.rows;
+
+    let params = new HttpParams()
+      .set('page', this.currentPage.toString())
+      .set('size', event.rows.toString());
+
+    if (this.searchText) params = params.set('description', this.searchText);
+    if (this.selectedCategory) params = params.set('category', this.selectedCategory);
+    if (this.dateFrom) params = params.set('dateFrom', this.formatDate(this.dateFrom));
+    if (this.dateTo) params = params.set('dateTo', this.formatDate(this.dateTo));
+    if (this.minAmount) params = params.set('minAmount', this.minAmount.toString());
+    if (this.maxAmount) params = params.set('maxAmount', this.maxAmount.toString());
+
+    if (event.sortField) {
+      const sortDirection = event.sortOrder === 1 ? 'asc' : 'desc';
+      params = params.set('sort', `${event.sortField},${sortDirection}`);
+    }
+
+    this.http.get<any>('http://localhost:8080/api/transactions/search', { params }).subscribe({
+      next: (response) => {
+        this.transactions = response.content;
+        this.totalRecords = response.totalElements;
+        this.loading = false;
+      },
+      error: () => this.loading = false
+    });
+  }
+
+  onUpload(event: any) {
+    const file = event.files[0];
+
+    if (!this.selectedSource) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('customerId', '1');
+    formData.append('source', this.selectedSource as string);
+
+    this.http.post<any[]>('http://localhost:8080/api/transactions/upload', formData)
+      .subscribe({
+        next: (transactions) => {
+          this.loadTransactions({ first: 0, rows: 20 });
+          event.files = [];
+        },
+        error: (err) => {
+          console.error('Error uploading file:', err);
+        }
+      });
+  }
+
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }
