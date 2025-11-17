@@ -47,9 +47,13 @@ public class OllamaClassifierServiceImpl implements TransactionClassifierService
             return TransactionCategory.OTHER;
         }
 
-        return Optional.ofNullable(response)
-                .map(outputConverter::convert)
-                .map(TransactionClassification::category)
-                .orElse(TransactionCategory.OTHER);
+        try {
+            return Optional.ofNullable(response)
+                    .map(outputConverter::convert)
+                    .map(TransactionClassification::category)
+                    .orElse(TransactionCategory.OTHER);
+        } catch (Exception e) {
+            return TransactionCategory.OTHER;
+        }
     }
 }

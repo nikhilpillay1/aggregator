@@ -52,3 +52,10 @@ csv-source:
       amount-key: Amount
       description-key: Description
       date-format: 'yyyy-MM-dd'
+
+    NEW SOURCE:
+      header-line: 'Paste header line here (keep single quotes)'
+      date-key: What your CSV header calls the "Date" column
+      amount-key: What your CSV header calls the "Amount" column
+      description-key: What your CSV header calls the "Description" column
+      date-format: 'eg. yyyy-MM-dd, yyyy/MM/dd, etc.'
