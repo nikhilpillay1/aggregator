@@ -7,6 +7,7 @@ import {DatePicker} from 'primeng/datepicker';
 import {InputText} from 'primeng/inputtext';
 import {CurrencyPipe, NgForOf, NgIf} from '@angular/common';
 import {FileUpload} from 'primeng/fileupload';
+import {ButtonDirective} from 'primeng/button';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +21,7 @@ import {FileUpload} from 'primeng/fileupload';
     FileUpload,
     NgIf,
     NgForOf,
+    ButtonDirective,
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
@@ -43,6 +45,7 @@ export class Home implements OnInit {
 
   private searchTimeout: any;
   private currentPage = 0;
+  protected uploading: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -107,6 +110,8 @@ export class Home implements OnInit {
   }
 
   onUpload(event: any) {
+    this.uploading = true;
+
     const file = event.files[0];
 
     if (!this.selectedSource) {
@@ -123,9 +128,11 @@ export class Home implements OnInit {
         next: (transactions) => {
           this.loadTransactions({ first: 0, rows: 20 });
           event.files = [];
+          this.uploading = false;
         },
         error: (err) => {
           console.error('Error uploading file:', err);
+          this.uploading = false;
         }
       });
   }
@@ -136,4 +143,15 @@ export class Home implements OnInit {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+
+  deleteTransaction(id: number) {
+      this.http.delete(`http://localhost:8080/api/transactions/${id}`).subscribe({
+        next: () => {
+          this.loadTransactions({ first: this.currentPage * 20, rows: 20 });
+        },
+        error: (err) => {
+          console.error('Error deleting transaction:', err);
+        }
+      });
+    }
 }

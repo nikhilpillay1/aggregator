@@ -1,5 +1,16 @@
 <div class="card mt-8">
   <div class="flex gap-3 align-items-end mb-3">
+
+<!--    <div *ngIf="uploading"-->
+<!--         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;-->
+<!--              background: rgba(255,255,255,0.8); z-index: 1000;-->
+<!--              display: flex; align-items: center; justify-content: center;">-->
+<!--      <div class="flex flex-column align-items-center gap-3">-->
+<!--        <i class="pi pi-spin pi-spinner" style="font-size: 3rem;"></i>-->
+<!--        <span class="font-semibold">Uploading and processing file...</span>-->
+<!--      </div>-->
+<!--    </div>-->
+
     <div class="flex-1">
       <label for="source" class="block mb-2">Source</label>
       <p-select
@@ -26,10 +37,9 @@
         <ng-template pTemplate="content" let-files>
           <div *ngIf="files.length > 0">
             <div *ngFor="let file of files" class="flex align-items-center gap-3 p-3">
-              <i class="pi pi-file text-4xl"></i>
+              <i class="pi pi-file text-4xl mt-1"></i>
               <div class="flex-1">
                 <div class="font-semibold">{{ file.name }}</div>
-                <div class="text-sm text-color-secondary">{{ file.size }}</div>
               </div>
             </div>
           </div>
@@ -84,9 +94,9 @@
 
   <p-table
     [value]="transactions"
-    [loading]="loading"
+    [loading]="uploading"
     [paginator]="true"
-    [rows]="9"
+    [rows]="8"
     [totalRecords]="totalRecords"
     [lazy]="true"
     [customSort]="true"
@@ -107,6 +117,7 @@
         <th pSortableColumn="category">
           Category <p-sortIcon field="category" />
         </th>
+        <th style="width: 80px">Delete</th>
       </tr>
     </ng-template>
 
@@ -116,6 +127,14 @@
         <td>{{ transaction.description }}</td>
         <td>{{ transaction.amount | currency:'R ' }}</td>
         <td>{{ transaction.category }}</td>
+        <td>
+          <button
+            pButton
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger p-button-text"
+            (click)="deleteTransaction(transaction.id)">
+          </button>
+        </td>
       </tr>
     </ng-template>
   </p-table>

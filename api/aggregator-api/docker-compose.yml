@@ -14,6 +14,7 @@ services:
 
   api:
     build: .
+    image: aggregator-api
     container_name: aggregator-api
     restart: always
     depends_on:
@@ -46,12 +47,13 @@ services:
               capabilities: [ gpu ]
 
   ui:
+    image: aggregator-ui
     container_name: aggregator-ui
     build:
       context: ../../ui/aggregator-ui
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "4200:80"
     depends_on:
       - api
 
