@@ -8,7 +8,9 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,24 +18,32 @@ public class OllamaClassifierServiceImpl implements TransactionClassifierService
 
     private final ChatClient chat;
 
+    private static final String CATEGORY_LIST;
+
+    static {
+        CATEGORY_LIST = Arrays.stream(TransactionCategory.values())
+                .map(Enum::name)
+                .collect(Collectors.joining(", "));
+    }
+
+    final BeanOutputConverter<TransactionClassification> outputConverter =
+            new BeanOutputConverter<>(TransactionClassification.class);
+
     @Override
     public TransactionCategory classify(String transactionDescription) {
-
-        BeanOutputConverter<TransactionClassification> outputConverter =
-                new BeanOutputConverter<>(TransactionClassification.class);
 
         String systemPrompt = """
             You are a bank transaction classifier. Analyze the transaction description
             and determine which category it belongs to. Be precise and consistent.
             
-            Categories: ACCOMMODATION, UTILITIES, GROCERIES, SHOPPING, RESTAURANT, TRANSPORTATION, INSURANCE, HEALTHCARE, DEBT_PAYMENT, REFUND, ACCOUNT_FEE, GAMING, TRAVEL, STREAMING_SERVICE, AIRTIME, INCOME, INTEREST, INVESTMENT, TAXES, WITHDRAWAL, DEPOSIT, PAYMENT, EFT, OTHER
+            Categories: %s
             
             CRITICAL: Respond with ONLY valid JSON on a SINGLE LINE with NO whitespace, newlines, or formatting.
             Do not include any explanatory text, preamble, comments, or backslashes.
             Start your response directly with the opening brace.
             
             {format}
-            """;
+            """.formatted(CATEGORY_LIST);
 
         String response;
         try {
