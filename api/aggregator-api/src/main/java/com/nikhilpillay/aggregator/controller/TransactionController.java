@@ -20,7 +20,9 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @RestController
@@ -47,6 +49,12 @@ public class TransactionController {
     public ResponseEntity<List<TransactionResponseDto>> findAll() {
         List<TransactionResponseDto> transactions = service.findAll();
         return ResponseEntity.ok(transactions);
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getCategories() {
+        List<String> categories = Arrays.stream(TransactionCategory.values()).map(Enum::name).toList();
+        return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/{id}")
