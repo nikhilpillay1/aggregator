@@ -22,6 +22,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerResponseMapper responseMapper;
 
+    @Override
+    public CustomerResponseDto create(CustomerRequestDto dto) {
+        Customer customer = requestMapper.toEntity(dto);
+        Customer saved = repository.save(customer);
+        return responseMapper.toDto(saved);
+    }
 
     @Override
     public List<CustomerResponseDto> findAll() {
@@ -35,17 +41,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponseDto create(CustomerRequestDto dto) {
-        Customer customer = requestMapper.toEntity(dto);
-        Customer saved = repository.save(customer);
-        return responseMapper.toDto(saved);
-    }
-
-    @Override
     public CustomerResponseDto update(Long id, CustomerRequestDto dto) {
         Customer customer = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
+
         customer.setName(dto.name());
+
         Customer updated = repository.save(customer);
         return responseMapper.toDto(updated);
     }

@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface CustomerService {
 
-    List<CustomerResponseDto> findAll();
+    CustomerResponseDto create(CustomerRequestDto dto);
 
     CustomerResponseDto findById(Long id);
 
-    CustomerResponseDto create(CustomerRequestDto dto);
+    List<CustomerResponseDto> findAll();
 
     CustomerResponseDto update(Long id, CustomerRequestDto dto);
 
