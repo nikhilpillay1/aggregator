@@ -45,14 +45,15 @@ services:
               count: all
               capabilities: [ gpu ]
 
-#  ui:
-#    build:
-#      context: ../aggregator-ui
-#      dockerfile: Dockerfile
-#    ports:
-#      - "80:80"
-#    depends_on:
-#      - api
+  ui:
+    container_name: aggregator-ui
+    build:
+      context: ../../ui/aggregator-ui
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api
 
 volumes:
   postgres_data:
