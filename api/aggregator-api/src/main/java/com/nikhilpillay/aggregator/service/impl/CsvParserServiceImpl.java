@@ -77,18 +77,41 @@ public class CsvParserServiceImpl implements CsvParserService {
         LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern(config.getDateFormat()));
         transaction.setDate(date);
 
+        //this is quite messy because I didn't expect multiple relevant keys for a column, but one data source had this
         //parse amount
-        String amountStr = record.get(config.getAmountKey()).replace(",", "");
-        BigDecimal amount = new BigDecimal(amountStr);
-        transaction.setAmount(amount);
+        if (config.getAmountKey().contains(",")) {
+            String[] amountKeys = config.getAmountKey().split(",");
+
+            double total = 0;
+            for (String amountKey : amountKeys) {
+                if (!record.get(amountKey).isEmpty()) {
+                    total += Double.parseDouble((record.get(amountKey)));
+                }
+            }
+            transaction.setAmount(BigDecimal.valueOf(total));
+        } else {
+            String amountStr = record.get(config.getAmountKey()).replace(",", "");
+            BigDecimal amount = new BigDecimal(amountStr);
+            transaction.setAmount(amount);
+        }
 
         //parse description
-        String description = record.get(config.getDescriptionKey());
-        transaction.setDescription(description);
+        if (config.getDescriptionKey().contains(",")) {
+            String[] descriptionKeys = config.getDescriptionKey().split(",");
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String descriptionKey : descriptionKeys) {
+                stringBuilder.append(" ").append(record.get(descriptionKey));
+            }
+            transaction.setDescription(stringBuilder.toString());
+        } else {
+            String description = record.get(config.getDescriptionKey());
+            transaction.setDescription(description);
+        }
 
         //classify transaction category
         try {
-            TransactionCategory category = transactionClassifierService.classify(description);
+            TransactionCategory category = transactionClassifierService.classify(transaction.getDescription());
             transaction.setCategory(category);
         } catch (Exception e) {
             transaction.setCategory(TransactionCategory.OTHER);
