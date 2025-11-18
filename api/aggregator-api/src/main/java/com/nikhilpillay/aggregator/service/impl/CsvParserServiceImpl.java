@@ -54,6 +54,10 @@ public class CsvParserServiceImpl implements CsvParserService {
                 }
             }
 
+            if (line == null) {
+                throw new RuntimeException("Header line not found in CSV file");
+            }
+
             CSVFormat csvFormat = CSVFormat.DEFAULT
                     .withHeader(config.getHeaders())
                     .withSkipHeaderRecord(false)
@@ -65,6 +69,10 @@ public class CsvParserServiceImpl implements CsvParserService {
                     transactions.add(transaction);
                 }
             }
+        }
+
+        if (transactions.isEmpty()) {
+            throw new RuntimeException("No transactions were found. Is this the correct file?");
         }
         return transactions;
     }
