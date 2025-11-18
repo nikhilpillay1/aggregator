@@ -13,7 +13,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   api:
-    build: .
+    build: ./api/aggregator-api
     image: aggregator-api
     container_name: aggregator-api
     restart: always
@@ -50,8 +50,7 @@ services:
     image: aggregator-ui
     container_name: aggregator-ui
     build:
-      context: ../../ui/aggregator-ui
-      dockerfile: Dockerfile
+      context: ./ui/aggregator-ui
     ports:
       - "80:80"
     depends_on:

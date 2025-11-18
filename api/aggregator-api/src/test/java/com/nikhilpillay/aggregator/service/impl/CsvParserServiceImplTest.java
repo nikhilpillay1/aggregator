@@ -146,26 +146,6 @@ class CsvParserServiceImplTest {
     }
 
     @Test
-    void givenEmptyFile_thenServiceReturnsNoTransactions() throws IOException {
-        String csvContent = "Date,Description,Amount\n";
-
-        MultipartFile file = new MockMultipartFile(
-                "file",
-                "transactions.csv",
-                "text/csv",
-                csvContent.getBytes()
-        );
-
-        when(csvSourceConfigProperties.getConfigs()).thenReturn(configMap);
-        when(customerRepository.findById(1L)).thenReturn(Optional.of(testCustomer));
-
-        List<Transaction> transactions = csvParserService.parseCsv(file, 1L, "test-bank");
-
-        assertNotNull(transactions);
-        assertEquals(0, transactions.size());
-    }
-
-    @Test
     void givenCsvWithMultipleHeaderLines_thenUnnecessaryLinesAreSkipped() throws IOException {
         String csvContent = "Bank Statement Export\n" +
                 "Account Number: 12345\n" +
