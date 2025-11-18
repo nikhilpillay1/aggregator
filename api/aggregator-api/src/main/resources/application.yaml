@@ -25,7 +25,7 @@ spring:
         options:
           model: mistral
 
-# This was designed as a ConfigurationProperties just because this would make it easier to see
+# The following was designed as a ConfigurationProperties just because this would make it easier to see
 # how support for additional sources can be added. For a proper API, make this a DB entity
 # so that support for more sources can be added during runtime.
 
@@ -36,7 +36,7 @@ csv-source:
       header-line: 'Nr,Account,Posting Date,Transaction Date,Description,Original Description,Parent Category,Category,Money In,Money Out,Fee,Balance'
       date-key: Posting Date
       amount-key: Money In,Money Out,Fee
-      description-key: Description,Category
+      description-key: Description,Parent Category,Category
       date-format: 'yyyy-MM-dd'
 
     PAYPAL:
@@ -53,18 +53,5 @@ csv-source:
       description-key: Description
       date-format: 'yyyy/MM/dd'
 
-    ABSA:
-      header-line: 'Date,Transaction Type,Description,Amount,Balance,Currency'
-      date-key: Date
-      amount-key: Amount
-      description-key: Description
-      date-format: 'yyyy-MM-dd'
-
     #In the event of multiple relevant keys for "amount" and "description", add them all separated with commas
     #(See Capitec as an example)
-    NEW SOURCE:
-      header-line: 'Paste header line here (keep single quotes)'
-      date-key: What your CSV header calls the "Date" column
-      amount-key: What your CSV header calls the "Amount" column
-      description-key: What your CSV header calls the "Description" column
-      date-format: 'eg. yyyy-MM-dd, yyyy/MM/dd, etc.'
