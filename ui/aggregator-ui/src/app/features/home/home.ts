@@ -8,6 +8,8 @@ import {InputText} from 'primeng/inputtext';
 import {CurrencyPipe, NgForOf, NgIf} from '@angular/common';
 import {FileUpload} from 'primeng/fileupload';
 import {ButtonDirective} from 'primeng/button';
+import {MessageService} from 'primeng/api';
+import {ToastModule} from 'primeng/toast';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +24,9 @@ import {ButtonDirective} from 'primeng/button';
     NgIf,
     NgForOf,
     ButtonDirective,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -47,7 +51,7 @@ export class Home implements OnInit {
   private currentPage = 0;
   protected uploading: boolean = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private messageService: MessageService) {}
 
   ngOnInit() {
     this.loadTransactions({ first: 0, rows: 20 });
@@ -129,10 +133,22 @@ export class Home implements OnInit {
           this.loadTransactions({ first: 0, rows: 20 });
           event.files = [];
           this.uploading = false;
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Transactions uploaded successfully'
+          });
+
         },
         error: (err) => {
           console.error('Error uploading file:', err);
           this.uploading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Upload Failed',
+            detail: err.error?.message || 'An error occurred while uploading the file'
+          });
         }
       });
   }

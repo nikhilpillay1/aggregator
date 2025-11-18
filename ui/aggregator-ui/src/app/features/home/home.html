@@ -1,24 +1,15 @@
 <div class="card mt-8">
   <div class="flex gap-3 align-items-end mb-3">
 
-<!--    <div *ngIf="uploading"-->
-<!--         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;-->
-<!--              background: rgba(255,255,255,0.8); z-index: 1000;-->
-<!--              display: flex; align-items: center; justify-content: center;">-->
-<!--      <div class="flex flex-column align-items-center gap-3">-->
-<!--        <i class="pi pi-spin pi-spinner" style="font-size: 3rem;"></i>-->
-<!--        <span class="font-semibold">Uploading and processing file...</span>-->
-<!--      </div>-->
-<!--    </div>-->
-
     <div class="flex-1">
       <label for="source" class="block mb-2">Source</label>
       <p-select
         id="source"
         [(ngModel)]="selectedSource"
+        [(ngModel)]="selectedSource"
         [options]="sources"
         placeholder="Please select a source before uploading"
-        [style]="{'width': '100%'}" />
+        [style]="{'width': '100%'}"/>
     </div>
 
     <div class="flex-1">
@@ -101,21 +92,30 @@
     [lazy]="true"
     [customSort]="true"
     (onLazyLoad)="loadTransactions($event)"
+    styleClass="rounded-lg overflow-hidden shadow-sm  border border-gray-600"
     sortMode="single">
 
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="date">
-          Date <p-sortIcon field="date" />
+          Date
+          <p-sortIcon field="date"/>
         </th>
         <th pSortableColumn="description">
-          Description <p-sortIcon field="description" />
+          Description
+          <p-sortIcon field="description"/>
         </th>
         <th pSortableColumn="amount">
-          Amount <p-sortIcon field="amount" />
+          Amount
+          <p-sortIcon field="amount"/>
         </th>
         <th pSortableColumn="category">
-          Category <p-sortIcon field="category" />
+          Category
+          <p-sortIcon field="category"/>
+        </th>
+        <th pSortableColumn="source">
+          Source
+          <p-sortIcon field="source"/>
         </th>
         <th style="width: 80px">Delete</th>
       </tr>
@@ -127,6 +127,7 @@
         <td>{{ transaction.description }}</td>
         <td>{{ transaction.amount | currency:'R ' }}</td>
         <td>{{ transaction.category }}</td>
+        <td>{{ transaction.source }}</td>
         <td>
           <button
             pButton
@@ -139,3 +140,4 @@
     </ng-template>
   </p-table>
 </div>
+<p-toast></p-toast>
