@@ -1,0 +1,25 @@
+Nr,Account,Posting Date,Transaction Date,Description,Original Description,Parent Category,Category,Money In,Money Out,Fee,Balance
+1,Nikhil,2025-10-01,2025-10-01 20:02,Eft Debit Order (2703235636): Virgin Active Membership (363462695 NETC),VIRGIN ACTIVE 363462695 NETCASH   SERV FEE  2703235636,Personal & Family,Sport & Hobbies,1660.00,,,1234
+2,Nikhil,2025-10-01,2025-10-01 20:02,Debit Order Fee,Debit Order Fee,Fees,Fees,,,-3.00,1234
+95,Nikhil,2025-11-18,2025-11-16 14:09,Engen Randvaal (Card 4930),ENGEN BLOCKHOUSE 1 STO Randvaal       ZA,Transport,Fuel,,-600.00,,1234
+1,Nikhil,2025-10-01,2025-10-01 20:02,Eft Debit Order (2703235636): Virgin Active Membership (363462695 NETC),VIRGIN ACTIVE 363462695 NETCASH   SERV FEE  2703235636,Personal & Family,Sport & Hobbies,1660.00,,,1234
+2,Nikhil,2025-10-01,2025-10-01 20:02,Debit Order Fee,Debit Order Fee,Fees,Fees,,,-3.00,1234
+3,Nikhil,2025-10-02,2025-10-02 09:15,Pick n Pay (Card 4930),PICK N PAY CLAREMONT 2283   ZA,Shopping,Groceries,,-289.40,,1234
+4,Nikhil,2025-10-03,2025-10-03 11:44,Netflix.com Subscription,NETFLIX.COM 083-199   ZA,Entertainment,Streaming,, -159.00,,1234
+5,Nikhil,2025-10-04,2025-10-04 18:02,Uber Trip Cape Town,UBER *TRIP HELP.UBER.COM   ZA,Transport,Rideshare,,-68.22,,1234
+6,Nikhil,2025-10-05,2025-10-05 08:39,Salary Payment,SALARY PAYMENT REF 99233,Income,Salary,19550.00,,,1234
+7,Nikhil,2025-10-06,2025-10-06 15:51,Woolworths Food Sea Point,WOOLWORTHS FOOD SEAPOINT  ZA,Shopping,Groceries,,-423.10,,1234
+8,Nikhil,2025-10-06,2025-10-06 21:28,Steam Purchase (4930),STEAMGAMES.COM  VALVE  WA,Entertainment,Gaming,,-349.00,,1234
+9,Nikhil,2025-10-07,2025-10-07 07:22,MyCiTi Bus Top-Up,MYCITI TOPUP  CT ICC   ZA,Transport,Public Transport,,-40.00,,1234
+10,Nikhil,2025-10-07,2025-10-07 13:17,Checkers Sixty60 Delivery,CHECKERS SIXTY60 0860  SEA POINT,Shopping,Groceries,,-199.99,,1234
+11,Nikhil,2025-10-08,2025-10-08 10:03,Interest Earned,INT EARNED REF 221,Income,Interest,14.88,,,1234
+12,Nikhil,2025-10-09,2025-10-09 17:44,Clicks Pharmacy,CLICKS RONDEBOSCH  ZA,Health,Pharmacy,,-89.95,,1234
+13,Nikhil,2025-10-10,2025-10-10 09:01,Mugg & Bean (Card 4930),MUGG N BEAN CAVENDISH ZA,Food & Dining,Coffee Shops,,-78.00,,1234
+14,Nikhil,2025-10-11,2025-10-11 12:31,Yoco*Bootlegger,RONDEBOSCH BOOTLEGGER ZA,Food & Dining,Cafes,,-62.50,,1234
+15,Nikhil,2025-10-11,2025-10-11 21:04,Takealot Order 88219,TAKEALOT ONLINE CAPE TOWN ZA,Shopping,Online,,-589.00,,1234
+16,Nikhil,2025-10-12,2025-10-12 08:12,PnP Express Fuel,PICKNPAY EXPRESS FUEL N1 ZA,Transport,Fuel,,-350.00,,1234
+17,Nikhil,2025-10-12,2025-10-12 19:22,Parking — V&A Waterfront,PARKING VNA P2  CAPE TOWN ZA,Transport,Parking,,-18.00,,1234
+18,Nikhil,2025-10-13,2025-10-13 17:00,ATM Withdrawal,ATM CASH FEE FNB  ZA,Fees,Bank Fees,,,-7.50,1234
+19,Nikhil,2025-10-13,2025-10-13 17:00,ATM Cash Withdrawal,ATM WITHDRAWAL FNB  ZA,Transfers,Cash Withdrawal,, -600.00,,1234
+20,Nikhil,2025-10-14,2025-10-14 13:12,Kauai Smoothie,Kauai Cavendish  ZA,Food & Dining,Healthy Eating,,-74.90,,1234
+95,Nikhil,2025-11-18,2025-11-16 14:09,Engen Randvaal (Card 4930),ENGEN BLOCKHOUSE 1 STO Randvaal       ZA,Transport,Fuel,,-600.00,,1234
