@@ -25,12 +25,12 @@ There are 4 relevant parts of the application, that are each created as separate
 2) Ollama runs significantly faster on a PC with a dedicated graphics card. If running the app on a computer with a GPU, open up the file `docker-compose.yml` in a text editor, and navigate to line 40, which should be commented out:
    
 deploy:  
-  resources:  
-    reservations:  
-      devices:  
-        - driver: nvidia  
-          count: all  
-          capabilities: [ gpu ]
+   resources:  
+      reservations:  
+         devices:  
+             - driver: nvidia  
+               count: all  
+               capabilities: [ gpu ]
 
 If you have a dedicated Nvidia GPU, uncomment these lines. If you have a dedicated AMD GPU, uncomment these lines, and replace `driver: nvidia` with `driver: amd` (I have only confirmed this works on Nvidia GPUs). If you don't have a dedicated graphics card, just leave these lines commented out - the application will still work, it'll just take longer to aggregate transactions. 
 
