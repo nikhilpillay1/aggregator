@@ -46,6 +46,24 @@ services:
               count: all
               capabilities: [ gpu ]
 
+  ollama-pull:
+    image: ollama/ollama:latest
+    container_name: ollama-pull
+    depends_on:
+      - ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    entrypoint: /bin/sh
+    command: >
+      -c "
+      echo 'Waiting for Ollama to start...' &&
+      sleep 5 &&
+      echo 'Pulling mistral model...' &&
+      ollama pull mistral &&
+      echo 'Model pulled successfully!'
+      "
+    restart: "no"
+
   ui:
     image: aggregator-ui
     container_name: aggregator-ui
