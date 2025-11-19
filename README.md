@@ -22,7 +22,7 @@ There are 4 relevant parts of the application, that are each created as separate
    
    Then enter this directory.
    
-2) Ollama runs significantly faster on a PC with a dedicated graphics card. If running the app on a computer with a GPU, open up the file `docker-compose.yml` in a text editor, and navigate to line 40, which should be commented out:
+2) Ollama runs significantly faster on a PC with a dedicated graphics card. If running the app on a computer with an Nvidia GPU, everything is already set up. If you have an AMD GPU or no GPU, open up the file `docker-compose.yml` in a text editor, and navigate to the following lines:
    
 deploy:  
    resources:  
@@ -32,13 +32,14 @@ deploy:
                count: all  
                capabilities: [ gpu ]
 
-If you have a dedicated Nvidia GPU, uncomment these lines. If you have a dedicated AMD GPU, uncomment these lines, and replace `driver: nvidia` with `driver: amd` (I have only confirmed this works on Nvidia GPUs). If you don't have a dedicated graphics card, just leave these lines commented out - the application will still work, it'll just take longer to aggregate transactions. 
+If you have a dedicated AMD GPU, replace `driver: nvidia` with `driver: amd` (I have only tested the application with Nvidia). 
+If you don't have a dedicated graphics card, comment out all these lines - the application will still work, it'll just take longer to aggregate transactions. 
 
 3) Open up a new terminal in the project root, and run
    
    `docker compose up -d`
    
-   this will take a while, as it needs to download all the required images, including Ollama. (~2GB download)
+   this will take a while, as it needs to download all the required images, including Ollama. (~2GB download), and build the applications. There will be a warning about not having permission to pull the API or UI, but they are already in the repository, so you can ignore this.
    
 4) Once this process is done, the front-end and back-end should be built and running, and the database and Ollama should also be running - but without a model, the application won't be able to aggregate transactions. In order to download the model, run:
    
