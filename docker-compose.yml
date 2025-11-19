@@ -38,13 +38,13 @@ services:
     volumes:
       - ollama_data:/root/.ollama
 #   THE BELOW ONLY WORKS ON PCs WITH NVIDIA GPUs
-#    deploy:
-#      resources:
-#        reservations:
-#          devices:
-#            - driver: nvidia
-#              count: all
-#              capabilities: [ gpu ]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
 
   ui:
     image: aggregator-ui
