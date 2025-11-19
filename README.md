@@ -47,9 +47,11 @@ If you don't have a dedicated graphics card, comment out all these lines - the a
    
    Ollama has to download this model, so prepare for a ~4.5GB download.
 
-3) Now the application is ready! Open up a browser and navigate to:
+5) Now the application is ready! Open up a browser and navigate to:
    
    `http://localhost/`
+
+6) There is some example data based off real sources, in the project root (/example data) - feel free to use these to test the system if you don't have any CSVs on hand.
    
 ## Usage
 
